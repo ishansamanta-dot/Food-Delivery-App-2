@@ -17,7 +17,8 @@ import { fileURLToPath } from "url";
 configDotenv();
 
 // frontend URL...
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174']
+//const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174']
+const allowedOrigins = ['https://food-del-frontend-0ev5.onrender.com', 'https://food-delivery-app-2-cy27.onrender.com']
 
 // app configaretion...
 const app = express();

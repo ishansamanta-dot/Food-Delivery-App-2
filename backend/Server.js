@@ -22,6 +22,9 @@ const allowedOrigins = ['https://food-del-frontend-0ev5.onrender.com', 'https://
 
 // app configaretion...
 const app = express();
+//Without trust proxy and NODE_ENV=production, Render’s HTTPS proxy stops the secure cookie from being set.
+app.set("trust proxy", 1);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

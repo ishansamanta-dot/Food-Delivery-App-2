@@ -27,7 +27,9 @@ axios.interceptors.response.use(
 
 const App = () => {
 
+  //const url = "http://localhost:3001";
   const url = "http://localhost:3001";
+  const url = "https://food-delivery-app-2-zxnh.onrender.com"
   const [token, setToken] = useState(localStorage.getItem("adminToken") || "")
 
   // Every admin request now sends the token automatically

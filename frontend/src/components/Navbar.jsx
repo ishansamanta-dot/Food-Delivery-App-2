@@ -200,7 +200,7 @@ const navbar = ({ setShowLogin }) => {
                 </li>
                 <hr className="border-white/10" />
                 <li
-                  onClick={() => window.location.href = "http://localhost:5174"}
+                  onClick={() => window.location.href = import.meta.env.VITE_ADMIN_URL || "http://localhost:5174"}
                   className="flex items-center gap-2 whitespace-nowrap transition-colors duration-200 hover:text-orange-500"
                 >
                   <Shield size={18} />

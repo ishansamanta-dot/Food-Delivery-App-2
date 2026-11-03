@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import crypto from "crypto";
 import { transporter } from "../config/nodemailer.js";
+import { sendBrevoEmail } from "../config/brevo.js";
 
 
 
@@ -210,7 +211,60 @@ export const isAuthenticated = async (req, res) => {
 
 //--- send Passward reset OTP --- //
 
+//--- Send Password Reset OTP using Brevo API --- //
+
 export const sendResetOtp = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.json({
+            success: false,
+            message: "Email is required"
+        });
+    }
+
+    try {
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.json({
+                success: false,
+                message: "User Not Found!"
+            });
+        }
+
+        const otp = String(
+            Math.floor(100000 + Math.random() * 900000)
+        );
+
+        user.resetOtp = otp;
+        user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
+
+        await user.save();
+
+        // Send OTP using Brevo HTTP API
+        await sendBrevoEmail({
+            to: user.email,
+            subject: "FoodBite Password Reset OTP",
+            text: `Your FoodBite password reset OTP is ${otp}. It expires in 15 minutes.`
+        });
+
+        return res.json({
+            success: true,
+            message: "Password reset OTP sent to your email"
+        });
+
+    } catch (error) {
+        console.error("Password reset email error:", error.message);
+
+        return res.json({
+            success: false,
+            message: "Unable to send OTP. Please try again later."
+        });
+    }
+};
+
+/*export const sendResetOtp = async (req, res) => {
     const { email } = req.body;
     if (!email) {
         return res.json({ success: false, message: "email is required" })
@@ -246,7 +300,7 @@ export const sendResetOtp = async (req, res) => {
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
-}
+}*/
 
 //--- Reset user password --- //
 
